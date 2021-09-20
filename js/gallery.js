@@ -30,7 +30,9 @@ imageRef.setAttribute('src', 'https://cdn.pixabay.com/photo/2010/12/13/10/13/tul
 imageRef.setAttribute('data-source', 'https://cdn.pixabay.com/photo/2010/12/13/10/13/tulips-2546_1280.jpg');
 imageRef.setAttribute('alt', 'Tulips');
 
-galleryContainerRef.append(listRef,linkRef,imageRef);
+linkRef.appendChild(imageRef);
+listRef.appendChild(linkRef);
+galleryContainerRef.appendChild(listRef);
 
 
 
