@@ -9,7 +9,12 @@
 
 import galleryItems from '../app.js';
 
-const galleryContainerRef = document.querySelector('.js-gallery');
+const refs = {
+  galleryContainerRef: document.querySelector('.js-gallery'),
+  closeBtn: document.querySelector('.lightbox__button'),
+  modalWindow:document.querySelector('div.lightbox'),
+}
+
 const cartMarkUp = createWeb(galleryItems);
 
 function createWeb(galleryItems) {
@@ -30,21 +35,14 @@ function createWeb(galleryItems) {
 </li>`}
   ).join('')
 };
-galleryContainerRef.insertAdjacentHTML('beforeend',cartMarkUp);
 
-galleryContainerRef.addEventListener('click',openModalWindow);
+refs.galleryContainerRef.insertAdjacentHTML('beforeend', cartMarkUp);
 
-const modalWindow = document.querySelector('div.lightbox');
-
-
+refs.closeBtn.addEventListener('click', openModalWindow);
+// galleryContainerRef.addEventListener('click',openModalWindow);
 
 
 
 function openModalWindow() {
-  if (modalWindow.contains('is-open')) {
-    modalWindow.classList.add('is-open')
-  } else {
-    modalWindow.classList.remove('is-open');
-  }
-
+  refs.modalWindow.classList.toggle('is-open');
 }
