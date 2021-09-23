@@ -1,18 +1,12 @@
-// Разбей задание на несколько подзадач:
-
-// Создание и рендер разметки по массиву данных galleryItems из app.js и предоставленному шаблону.
-// Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
-// Открытие модального окна по клику на элементе галереи.
-// Подмена значения атрибута src элемента img.lightbox__image.
-// Закрытие модального окна по клику на кнопку button[data-action="close-lightbox"].
-// Очистка значения атрибута src элемента img.lightbox__image. Это необходимо для того, чтобы при следующем открытии модального окна, пока грузится изображение, мы не видели предыдущее.
-
 import galleryItems from '../app.js';
 
 const refs = {
   galleryContainerRef: document.querySelector('.js-gallery'),
+  overlayWindow: document.querySelector('.lightbox__overlay'),
+  imgRef: document.querySelector('.lightbox__image'),
+  imgLink:document.querySelector('.gallery__link'),
+  modalWindow: document.querySelector('div.lightbox'),
   closeBtn: document.querySelector('.lightbox__button'),
-  modalWindow:document.querySelector('div.lightbox'),
 }
 
 const cartMarkUp = createWeb(galleryItems);
@@ -38,11 +32,37 @@ function createWeb(galleryItems) {
 
 refs.galleryContainerRef.insertAdjacentHTML('beforeend', cartMarkUp);
 
-refs.closeBtn.addEventListener('click', openModalWindow);
-// galleryContainerRef.addEventListener('click',openModalWindow);
+refs.galleryContainerRef.addEventListener('click',onImageClick);
 
+function onImageClick(evt) {
+  if (!evt.target.classList.contains('gallery__image')) {
+    return
+  } else {
+    refs.modalWindow.classList.add('is-open');
+    refs.imgRef.src = evt.target.dataset.source;
+    refs.imgRef.alt = evt.target.alt;
 
+  };
+  stopDefAction(evt);
 
-function openModalWindow() {
-  refs.modalWindow.classList.toggle('is-open');
 }
+
+function stopDefAction(evt) {
+  evt.preventDefault();
+  }
+
+refs.closeBtn.addEventListener('click', closeModalWindow);
+
+function closeModalWindow() {
+  refs.modalWindow.classList.remove('is-open');
+  refs.imgRef.src = '';
+}
+
+window.addEventListener('keydown', closeModalEsc);
+
+function closeModalEsc(evt) {
+  if (evt.keyCode === 27) {
+    closeModalWindow();
+  }
+}
+
