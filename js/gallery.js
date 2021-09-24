@@ -1,68 +1,106 @@
-import galleryItems from '../app.js';
+import galleryItem from "../app.js";
 
 const refs = {
-  galleryContainerRef: document.querySelector('.js-gallery'),
-  overlayWindow: document.querySelector('.lightbox__overlay'),
-  imgRef: document.querySelector('.lightbox__image'),
-  imgLink:document.querySelector('.gallery__link'),
-  modalWindow: document.querySelector('div.lightbox'),
-  closeBtn: document.querySelector('.lightbox__button'),
+    galleryContainer: document.querySelector('.js-gallery'),
+    modalWindow: document.querySelector('div.lightbox'),
+    imageRef: document.querySelector('.lightbox__image'),
+    closeBtn: document.querySelector('.lightbox__button'),
+    overlay: document.querySelector('.lightbox__overlay'),
 }
 
-const cartMarkUp = createWeb(galleryItems);
+// refs.galleryContainer.addEventListener('click', createWeb);
 
-function createWeb(galleryItems) {
-  return galleryItems.map(({preview, original, description}) => {
-    return `
-     <li class="gallery__item">
-  <a
-    class="gallery__link"
-    href="${original}"
-  >
-    <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"
-    />
-  </a>
-</li>`}
-  ).join('')
+const containerMarkUp = createWeb(galleryItem);
+
+function createWeb(galleryItem) {
+    return galleryItem.map(({ preview, original, description }) => {
+        return `
+            <li class="gallery__item">
+            <a
+                class="gallery__link"
+                href="${original}"
+            >
+            <img
+                class="gallery__image"
+                src="${preview}"
+                data-source="${original}"
+                alt="${description}"
+            />
+             </a>
+            </li>
+        `
+    }).join('');
+}
+refs.galleryContainer.insertAdjacentHTML('beforeend', containerMarkUp);
+
+function openModalWindow(e) {
+    if (e.target.classList.add('is-open')) {
+        return;
+    }
+    else {
+        refs.modalWindow.classList.add('is-open');
+        refs.imageRef.src = e.target.dataset.source;
+        refs.imageRef.alt = e.target.alt;
+    }
+    offDev(e);
 };
 
-refs.galleryContainerRef.insertAdjacentHTML('beforeend', cartMarkUp);
+refs.galleryContainer.addEventListener('click', openModalWindow);
+refs.modalWindow.addEventListener('click', closeMidalWindow);
+// refs.closeBtn.addEventListener('click', closeMidalWindow);
+// refs.overlay.addEventListener('click', closeMidalWindow);
 
-refs.galleryContainerRef.addEventListener('click',onImageClick);
 
-function onImageClick(evt) {
-  if (!evt.target.classList.contains('gallery__image')) {
-    return
-  } else {
-    refs.modalWindow.classList.add('is-open');
-    refs.imgRef.src = evt.target.dataset.source;
-    refs.imgRef.alt = evt.target.alt;
-
-  };
-  stopDefAction(evt);
-
+function offDev(e) {
+    e.preventDefault();
 }
 
-function stopDefAction(evt) {
-  evt.preventDefault();
-  }
 
-refs.closeBtn.addEventListener('click', closeModalWindow);
+function closeMidalWindow() {
+    if (!refs.modalWindow.classList.contains('is-open')) {
+        return;
+    } else {
+        refs.modalWindow.classList.remove('is-open');
+        refs.imageRef.src = ''
+    }
+};
 
-function closeModalWindow() {
-  refs.modalWindow.classList.remove('is-open');
-  refs.imgRef.src = '';
+window.addEventListener('keydown', closeModalWindowByEsc);
+
+
+function closeModalWindowByEsc(e) {
+    if (e.keyCode === 27) {
+        closeMidalWindow();
+    }
 }
 
-window.addEventListener('keydown', closeModalEsc);
+// const filtredMassiv = galleryItem.filter(item => item.original);
+// console.log("~ filtredMassiv", filtredMassiv)
 
-function closeModalEsc(evt) {
-  if (evt.keyCode === 27) {
-    closeModalWindow();
-  }
-}
+// document.addEventListener('keydown', caroesel);
 
+// function caroesel(e) {
+//     const currentIndex = galleryItem.indexOf(refs.imageRef.src);
+//     if (e.key === 'ArrowLeft') {
+//         leftClick(currentIndex)
+//     } else if (e.ket === 'ArrowRigth') {
+//         rigthClick(currentIndex)
+//     }   
+// }
+
+
+// function leftClick(currentIndex) {
+//     let nextIndex = currentIndex - 1;
+//     if (nextIndex === - 1) {
+//         nextIndex = galleryItem.length - 1;
+//     }
+//     refs.imageRef.src = galleryItem[nextIndex];
+// }
+
+// function rigthClick(currentIndex) {
+//     let nextIndex = currentIndex + 1;
+//     if (nextIndex === galleryItem.length) {
+//         nextIndex = galleryItem.length + 1;
+//     }
+//     refs.imageRef.src = galleryItem[nextIndex];
+// }
