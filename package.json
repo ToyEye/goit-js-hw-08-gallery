@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/ToyEye/goit-js-hw-08-gallery/issues"
   },
-  "homepage": "https://github.com/ToyEye/goit-js-hw-08-gallery#readme"
+  "homepage": "https://github.com/ToyEye/goit-js-hw-08-gallery#readme",
+  "dependencies": {
+    "handlebars": "^4.7.7"
+  }
 }
